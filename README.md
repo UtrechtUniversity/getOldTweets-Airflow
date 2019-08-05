@@ -4,21 +4,34 @@ This repository contains an [Airflow](https://airflow.apache.org/) workflow
 for the collection of historical tweets based on a search query. The method
 combines the package [getOldTweets3](https://github.com/Mottl/GetOldTweets3)
 with the [Twitter status lookup API](https://developer.twitter.com/en/docs/tweets/post-and-engage/api-reference/get-statuses-lookup.html).
-Airflow is used to make this into structured data pipelines.
+Airflow is used to programmatically author, schedule and monitor the 
+collection process.
 
 The [Twitter Standard Search API](https://developer.twitter.com/en/docs/tweets/search/api-reference/get-search-tweets.html)
 searches against a sampling of recent Tweets published in the past 7 days.
 Therefore, this API is not very useful to collect historical tweets.
-The package getOldTweets3 is a webscraping package for Twitter that was developed to deal bypass this problem. The packages
-returns a selection of variables like "id", "permalink", "username", "to",
+The package getOldTweets3 is a webscraping package for Twitter that was 
+developed to solve this problem. The package can ce used to collect
+variables like "id", "permalink", "username", "to",
 "text", "date" in UTC, "retweets", "favorites", "mentions", "hashtags" and
 "geo". Unfortunately, not all relevant variables are returned and data can be
 a bit messy (broken urls). To collect the full set of variables, we can use 
 the [Twitter status lookup API](https://developer.twitter.com/en/docs/tweets/post-and-engage/api-reference/get-statuses-lookup.html).
-This API is less restrictive compared to the [Twitter Standard Search API](https://developer.twitter.com/en/docs/tweets/search/api-reference/get-search-tweets.html). This project collectes the full set of variables 
-after the getOldTweets3 scrape. 
+This API is less restrictive compared to the [Twitter Standard Search API](https://developer.twitter.com/en/docs/tweets/search/api-reference/get-search-tweets.html), but requires a list of status identifiers as input. 
+These identifiers are collected with getOldTweets and passed to the lookup API.
+The result is a complete set of information on every tweet collected. 
 
 ![DAG Twitter](img/dag.png)
+
+The worksflow contains steps (Operators in Airflow). The first step is the
+collection of tweets with getOldTweets3 `get_old_tweets_*`. The result of
+getOldTweets is not always complete. Therefor, we run this step 3 times (See
+DAG file to change the number of runs.) The next step, `merge_get_old_tweets`
+, is used to find the unique status identifiers of the 3 runs. In the
+`lookkup_tweets`, each status identifier is passed to Twitter status lookup
+API and results are stored in the folder `lookup/`. To validate the
+completeness of the lookup process, the `validate_get_old_tweets` compares the
+identifiers with the identifiers collected in the getOldTweets runs.
 
 ## Installation and preparation
 
@@ -83,7 +96,7 @@ are stored in 12 different files, one for each month.
 airflow backfill tweet_collector -s 2018-01-01 -e 2018-12-31
 ```
 
-Monitor the process with the Airflow GUI. 
+Navigate to http://localhost:8080/ to monitor the collection process. 
 
 ![Tree example](img/airflow_tree.png)
 
