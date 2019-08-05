@@ -18,6 +18,8 @@ the [Twitter status lookup API](https://developer.twitter.com/en/docs/tweets/pos
 This API is less restrictive compared to the [Twitter Standard Search API](https://developer.twitter.com/en/docs/tweets/search/api-reference/get-search-tweets.html). This project collectes the full set of variables 
 after the getOldTweets3 scrape. 
 
+![DAG Twitter](img/dag.png)
+
 ## Installation and preparation
 
 This project runs on Python 3.6+ and depends on tools like `Airflow`, `tweepy`
@@ -80,6 +82,10 @@ are stored in 12 different files, one for each month.
 ```
 airflow backfill tweet_collector -s 2018-01-01 -e 2018-12-31
 ```
+
+Monitor the process with the Airflow GUI. 
+
+![Tree example](img/airflow_tree.png)
 
 The format of this query is: `airflow backfill dag_id -s start_date -e end_date`
 
