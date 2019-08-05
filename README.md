@@ -23,15 +23,16 @@ The result is a complete set of information on every tweet collected.
 
 ![DAG Twitter](img/dag.png)
 
-The worksflow contains steps (Operators in Airflow). The first step is the
+The workflow contains steps (Operators in Airflow). The first step is the
 collection of tweets with getOldTweets3 `get_old_tweets_*`. The result of
-getOldTweets is not always complete. Therefor, we run this step 3 times (See
+getOldTweets is not always complete. Therefore, we run this step 3 times (See
 DAG file to change the number of runs.) The next step, `merge_get_old_tweets`
 , is used to find the unique status identifiers of the 3 runs. In the
 `lookkup_tweets`, each status identifier is passed to Twitter status lookup
-API and results are stored in the folder `lookup/`. To validate the
-completeness of the lookup process, the `validate_get_old_tweets` compares the
-identifiers with the identifiers collected in the getOldTweets runs.
+API, and results are stored in the folder `lookup/`. In the last step, the
+completeness of the lookup process is evaluated. The `validate_get_old_tweets`
+task compares the identifiers with the identifiers collected in the
+getOldTweets runs and reports the completeness.
 
 ## Installation and preparation
 
@@ -43,7 +44,7 @@ file.
 pip install -r requirements.txt
 ```
 
-Create a json file with your twitter credentials (e.g.
+Create a json file with your Twitter credentials (e.g.
 `~/Credentials/twitter_cred.json`). Read more about Twitter access tokens on
 the [Twitter developer documentation](https://developer.twitter.com/en/docs/basics/authentication/guides/access-tokens.html).
 
@@ -110,5 +111,5 @@ Results can be found in the output folder.
 
 ## Contact 
 
-This project is a project by [Parisa Zahedi](mailto:p.zahedi@uu.nl) and 
-[Jonathan de Bruin](mailto:j.debruin1@uu.nl). 
+This project is a project by Parisa Zahedi (p.zahedi@uu.nl, [@parisa-zahedi](https://github.com/parisa-zahedi))
+and Jonathan de Bruin (j.debruin1@uu.nl, [@J535D165](https://github.com/J535D165)).
