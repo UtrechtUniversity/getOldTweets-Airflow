@@ -1,24 +1,31 @@
+# -*- coding: utf-8 -*-
+#
+# Copyright (c) 2016-2018, Jonathan de Bruin & Parisa Zahedi
+# License BSD3 (See full license)
+
+"""Script to lookup Twitter status identifiers."""
+
 import argparse
 import json
 import os
 from pathlib import Path
 
-import tweepy
 import pandas as pd
+
+import tweepy
 
 
 def lookup_tweets(api, ids, chunk_size=100):
     """Lookup a list of statuses."""
-
     status_results = []
     status_errors = []
 
-    chunks = [ids[x:x+chunk_size] for x in range(0, len(ids), chunk_size)]
+    chunks = [ids[x:x + chunk_size] for x in range(0, len(ids), chunk_size)]
 
     for i, chunk in enumerate(chunks):
 
         print("Query chunk {}:{} of {}".format(
-            i*chunk_size+1, min((i+1)*chunk_size, len(ids)), len(ids)))
+            i * chunk_size + 1, min((i + 1) * chunk_size, len(ids)), len(ids)))
 
         try:
             # start collection tweets
@@ -48,7 +55,6 @@ def lookup_tweets(api, ids, chunk_size=100):
 
 def lookup_getoldtweets_file(api, input_fp, results_fp, error_fp=None):
     """Perform a lookup for getOldTweets file."""
-
     # open file
     tweets = pd.read_csv(input_fp, usecols=["id"])
     status_ids = tweets['id'].tolist()
@@ -86,7 +92,8 @@ if __name__ == '__main__':
     parser.add_argument('input_fp', type=str, help='source file')
     parser.add_argument('results_fp', type=str, help='results file')
     parser.add_argument('error_fp', type=str, help='error file')
-    parser.add_argument('--twitter_cred', type=str, default=None, help='error file')
+    parser.add_argument(
+        '--twitter_cred', type=str, default=None, help='error file')
     args = parser.parse_args()
 
     # setup twitter authentication

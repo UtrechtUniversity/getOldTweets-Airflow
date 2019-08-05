@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-
+#
+# Copyright (c) 2016-2018, Jonathan de Bruin & Parisa Zahedi
+# License BSD3 (See full license)
+#
 # Modify the search query. You might have to wait a couple of minutes before
 # chnages take place in the Airflow GUI.
 

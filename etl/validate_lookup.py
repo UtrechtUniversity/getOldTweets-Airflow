@@ -1,14 +1,18 @@
+# -*- coding: utf-8 -*-
+#
+# Copyright (c) 2016-2018, Jonathan de Bruin & Parisa Zahedi
+# License BSD3 (See full license)
+
+"""Script to validate the completeness of the lookup process."""
+
 import argparse
-import os
-import glob
 import json
 
 import pandas as pd
 
 
 def validate(got_ids, lookup_ids):
-
-    # print the results
+    """Validate results."""
     print(
         "Number of tweets missing in lookup:",
         len(set(got_ids) - set(lookup_ids)),

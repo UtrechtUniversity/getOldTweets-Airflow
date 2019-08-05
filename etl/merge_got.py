@@ -1,5 +1,15 @@
+# -*- coding: utf-8 -*-
+#
+# Copyright (c) 2016-2018, Jonathan de Bruin & Parisa Zahedi
+# License BSD3 (See full license)
+
+"""Script to collect Twitter status identifiers.
+
+Combine the results of multiple getOldTweets3 runs and collect
+the unique identifiers.
+"""
+
 import argparse
-import glob
 from pathlib import Path
 
 import pandas as pd
@@ -7,7 +17,6 @@ import pandas as pd
 
 def merge_got(fp_got):
     """Merge files"""
-
     if not isinstance(fp_got, list):
         fp_got = [fp_got]
 
